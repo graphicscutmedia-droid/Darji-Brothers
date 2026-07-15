@@ -29,8 +29,6 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            flex-wrap: wrap;
-            gap: 15px;
         }
         .logo {
             font-size: 24px;
@@ -40,13 +38,20 @@
             letter-spacing: 1px;
             cursor: pointer;
         }
+        
+        /* Navigation Styles & Mobile Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
         nav {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            gap: 20px;
         }
         nav a, .admin-nav-btn {
-            margin-left: 20px;
             text-decoration: none;
             color: #555;
             font-weight: 600;
@@ -73,8 +78,15 @@
             padding: 0 20px;
             transition: background 1.5s ease-in-out;
         }
-        .hero h1 { font-size: 42px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
-        .hero p { font-size: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+        .hero h1 { 
+            font-size: 42px; 
+            margin-bottom: 10px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4); 
+        }
+        .hero p { 
+            font-size: 20px; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3); 
+        }
 
         /* ------------------ OFFER / DISCOUNT DISPLAY SECTION ------------------ */
         .offer-banner {
@@ -89,7 +101,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             animation: offerPulse 2.5s infinite;
         }
         @keyframes offerPulse {
@@ -129,13 +141,13 @@
         /* ------------------ PRODUCT CONTAINER ------------------ */
         .container {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
         .section-title {
             text-align: center;
             font-size: 30px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             color: #222;
         }
         .section-title::after {
@@ -248,7 +260,7 @@
         label { display: block; margin: 10px 0 5px; font-weight: bold; }
         input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
         .checkbox-group { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        .checkbox-group label { inline-flex; align-items: center; font-weight: normal; margin: 0; cursor: pointer; }
+        .checkbox-group label { display: inline-flex; align-items: center; font-weight: normal; margin: 0; cursor: pointer; }
         .checkbox-group input { width: auto; margin-right: 5px; margin-bottom: 0; }
         .btn { background: #d63384; color: white; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; }
         .btn:hover { background: #b02366; }
@@ -291,6 +303,63 @@
             margin-top: 50px;
             font-size: 14px;
         }
+
+        /* ------------------ RESPONSIVE STYLES (MOBILE FRIENDLY) ------------------ */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .menu-toggle {
+                display: block; /* મોબાઈલ માં હેમબર્ગર મેનુ બતાવશે */
+            }
+            nav {
+                display: none; /* શરૂઆત માં મોબાઈલ મેનુ બંધ રહેશે */
+                flex-direction: column;
+                width: 100%;
+                background-color: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                gap: 15px;
+                z-index: 99;
+            }
+            nav.active {
+                display: flex; /* મેનુ ઓપન થાય ત્યારે આ દેખાશે */
+            }
+            nav a, .admin-nav-btn {
+                margin: 0;
+                width: 100%;
+                text-align: left;
+                padding: 5px 0;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
+            .offer-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            .offer-time {
+                align-self: flex-start;
+                margin-top: 5px;
+            }
+            .product-grid {
+                grid-template-columns: 1fr; /* મોબાઈલમાં એક લાઇનમાં એક જ કાર્ડ દેખાશે */
+                gap: 20px;
+            }
+            .product-img {
+                height: 300px;
+            }
+            .info-section {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -298,12 +367,13 @@
     <!-- HEADER / NAVIGATION -->
     <header>
         <div class="logo" onclick="forceLogoHome()">Darji Brothers</div>
-        <nav>
-            <a href="#" onclick="showStore()">HOME</a>
-            <a href="#" onclick="scrollToCollection()">COLLECTION</a>
-            <a href="#contact-nav">CONTACT</a>
-            <a href="#about-nav">ABOUT US</a>
-            <button class="admin-nav-btn" onclick="handleAdminNav()">ADMIN</button>
+        <div class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></div>
+        <nav id="nav-menu">
+            <a href="#" onclick="showStore(); closeMobileMenu();">HOME</a>
+            <a href="#" onclick="scrollToCollection(); closeMobileMenu();">COLLECTION</a>
+            <a href="#contact-nav" onclick="closeMobileMenu()">CONTACT</a>
+            <a href="#about-nav" onclick="closeMobileMenu()">ABOUT US</a>
+            <button class="admin-nav-btn" onclick="handleAdminNav(); closeMobileMenu();">ADMIN</button>
         </nav>
     </header>
 
@@ -358,7 +428,6 @@
 
     <!-- ADMIN PANEL VIEW -->
     <div class="container">
-        <!-- પાસવર્ડ ઇનપુટ ટાઇપ બદલીને "password" કર્યો છે જેથી અક્ષરો છુપાઈ જાય[cite: 1] -->
         <div class="admin-section" id="admin-login" style="max-width: 400px;">
             <h2>🔑 Admin Login</h2>
             <label>Enter Password:</label>
@@ -368,8 +437,8 @@
 
         <div class="admin-section" id="admin-dashboard">
             <div class="admin-tabs">
-                <button class="tab-btn active" id="tab-products" onclick="switchAdminTab('products')">🛒 Manage Products</button>
-                <button class="tab-btn" id="tab-offer" onclick="switchAdminTab('offer')">🏷️ Manage Offer / Discount</button>
+                <button class="tab-btn active" id="tab-products" onclick="switchAdminTab('products')">🛒 Products</button>
+                <button class="tab-btn" id="tab-offer" onclick="switchAdminTab('offer')">🏷️ Offers</button>
             </div>
 
             <!-- PRODUCT MANAGEMENT SECTION -->
@@ -442,7 +511,7 @@
                 <h2>🏷️ Setup Offer & Validity Details</h2>
                 <form id="offer-form" onsubmit="saveOfferDetails(event)">
                     <label>Offer Details / Text (ઑફરની વિગત):</label>
-                    <input type="text" id="offer-text-input" placeholder="e.g. Get 20% OFF on all Kurtis! (Code: DARJI20)" required>
+                    <input type="text" id="offer-text-input" placeholder="e.g. Get 20% OFF on all Kurtis!" required>
 
                     <label>Offer End Date (ઑફર પૂરી થવાની તારીખ):</label>
                     <input type="date" id="offer-end-date" required>
@@ -450,9 +519,9 @@
                     <label>Offer End Time (ઑફર પૂરો થવાનો સમય):</label>
                     <input type="time" id="offer-end-time" required>
 
-                    <div style="display: flex; gap: 10px;">
-                        <button type="submit" class="btn">Set Active Offer</button>
-                        <button type="button" class="btn" style="background: #dc3545;" onclick="clearOfferDetails()">Delete Offer</button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button type="submit" class="btn" style="flex: 1; min-width: 150px;">Set Active Offer</button>
+                        <button type="button" class="btn" style="background: #dc3545; flex: 1; min-width: 150px;" onclick="clearOfferDetails()">Delete Offer</button>
                     </div>
                 </form>
             </div>
@@ -468,6 +537,16 @@
     <script>
         const ADMIN_PASSWORD = "8980"; 
         let isAdminLoggedIn = false;
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const nav = document.getElementById('nav-menu');
+            nav.classList.toggle('active');
+        }
+        function closeMobileMenu() {
+            const nav = document.getElementById('nav-menu');
+            nav.classList.remove('active');
+        }
 
         const sliderImages = [
             {
