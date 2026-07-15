@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darji Brothers - Premium Clothing</title>
-    <!-- FontAwesome Icons for Beautiful Social Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ------------------ GLOBAL STYLES ------------------ */
@@ -337,7 +336,6 @@
 </head>
 <body>
 
-    <!-- HEADER / NAVIGATION -->
     <header>
         <div class="logo" onclick="forceLogoHome()">Darji Brothers</div>
         <div class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></div>
@@ -350,21 +348,17 @@
         </nav>
     </header>
 
-    <!-- STORE FRONT END -->
     <div id="store-view">
         <section class="hero" id="hero-slider">
             <h1 id="hero-title">Welcome to Darji Brothers</h1>
             <p id="hero-subtitle">50 Years of Stitching Excellence</p>
         </section>
 
-        <!-- Dynamic Offer Banner Display -->
         <div id="offer-display-container"></div>
 
-        <!-- Dynamic Store Content (with loading state) -->
         <div id="loading-indicator" class="loading-spinner">🔄 Loading collections, please wait...</div>
         <div id="dynamic-categories-container"></div>
 
-        <!-- CONTACT SECTION -->
         <div class="container" id="contact-nav">
             <h2 class="section-title">Contact Us</h2>
             <div class="contact-grid">
@@ -391,7 +385,6 @@
             </div>
         </div>
 
-        <!-- ABOUT SECTION -->
         <div class="container" id="about-nav">
             <h2 class="section-title">About Us</h2>
             <div class="info-section">
@@ -401,7 +394,6 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL VIEW -->
     <div class="container">
         <div class="admin-section" id="admin-login" style="max-width: 400px;">
             <h2>🔑 Admin Login</h2>
@@ -416,7 +408,6 @@
                 <button class="tab-btn" id="tab-offer" onclick="switchAdminTab('offer')">🏷️ Offers</button>
             </div>
 
-            <!-- PRODUCT MANAGEMENT SECTION -->
             <div id="product-mgmt-tab">
                 <h2 id="form-title">🛒 Add New Product</h2>
                 <form id="product-form" onsubmit="saveProduct(event)">
@@ -472,7 +463,6 @@
                 </div>
             </div>
 
-            <!-- OFFER / DISCOUNT MANAGEMENT SECTION -->
             <div id="offer-mgmt-tab" style="display: none;">
                 <h2>🏷️ Setup Offer & Validity Details</h2>
                 <form id="offer-form" onsubmit="saveOfferDetails(event)">
@@ -501,7 +491,7 @@
     </footer>
 
     <script>
-        // 🛑 !!! મહત્વનું !!! અહીં નીચે ડબલ કોટ્સમાં તમારી ગૂગલ વેબ એપની લિંક પેસ્ટ કરો 🛑
+        // 🛑 તમારી લિંક અહીં સફળતાપૂર્વક કનેક્ટ કરી દીધી છે 🛑
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEih-3L3edOI_VIN8IyxBtMAdSWlwyqUBIl1XQOwtDKA0iT1XEJcQCUZMwW4v8EzYVJw/exec";
 
         const ADMIN_PASSWORD = "8980"; 
@@ -568,7 +558,7 @@
         // ☁️ ગૂગલ શીટ માંથી ડેટા લોડ કરવો
         async function fetchProductsFromSheet() {
             document.getElementById('loading-indicator').style.display = 'block';
-            if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxEih-3L3edOI_VIN8IyxBtMAdSWlwyqUBIl1XQOwtDKA0iT1XEJcQCUZMwW4v8EzYVJw/exec") {
+            if (SCRIPT_URL === "તમારી_ગૂગલ_વેબ_એપ_URL_અહીં_પેસ્ટ_કરો") {
                 document.getElementById('loading-indicator').innerText = "⚠️ પ્લીઝ પેલા ગૂગલ વેબ એપ લિંક એડ કરો!";
                 return;
             }
