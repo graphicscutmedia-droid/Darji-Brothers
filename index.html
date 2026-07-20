@@ -441,6 +441,8 @@
                 <span class="filter-chip" id="chip-l" onclick="filterBySize('L')">L</span>
                 <span class="filter-chip" id="chip-xl" onclick="filterBySize('XL')">XL</span>
                 <span class="filter-chip" id="chip-xxl" onclick="filterBySize('XXL')">XXL</span>
+                <span class="filter-chip" id="chip-xxxl" onclick="filterBySize('XXXL')">XXXL</span>
+                <span class="filter-chip" id="chip-xxxxl" onclick="filterBySize('XXXXL')">XXXXL</span>
             </div>
         </div>
 
@@ -521,7 +523,7 @@
                     <label>Image URL (Google Drive / Postimages Direct Link):</label>
                     <input type="text" id="image" placeholder="Paste link here" required>
 
-                    <!-- નવું ઇન્સ્ટાગ્રામ લિંક ઉમેરવા માટેનું ખાનું -->
+                    <!-- ઇન્સ્ટાગ્રામ લિંક ઉમેરવા માટેનું ખાનું -->
                     <label>Instagram Extra Photos Link (Optional):</label>
                     <input type="text" id="insta_link" placeholder="Paste Instagram post/reel link here">
 
@@ -532,6 +534,8 @@
                         <label><input type="checkbox" name="sizes" value="L"> L</label>
                         <label><input type="checkbox" name="sizes" value="XL"> XL</label>
                         <label><input type="checkbox" name="sizes" value="XXL"> XXL</label>
+                        <label><input type="checkbox" name="sizes" value="XXXL"> XXXL</label>
+                        <label><input type="checkbox" name="sizes" value="XXXXL"> XXXXL</label>
                     </div>
 
                     <label>Available Colors (Comma separated):</label>
@@ -549,6 +553,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Sr. No.</th>
                                 <th>Category</th>
                                 <th>Name</th>
                                 <th>Price</th>
@@ -635,6 +640,7 @@
             const heroSubtitle = document.getElementById('hero-subtitle');
 
             setInterval(() => {
+                if(!heroSection || !heroTitle || !heroSubtitle) return;
                 currentSlideIndex = (currentSlideIndex + 1) % sliderImages.length;
                 const nextSlide = sliderImages[currentSlideIndex];
                 heroSection.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('${nextSlide.url}')`;
@@ -658,7 +664,7 @@
             
             const offerData = JSON.parse(localStorage.getItem('darji_active_offer'));
             const displayContainer = document.getElementById('offer-display-container');
-            if (!offerData) { displayContainer.innerHTML = ''; return; }
+            if (!offerData) { if(displayContainer) displayContainer.innerHTML = ''; return; }
 
             const endDateTime = new Date(`${offerData.endDate}T${offerData.endTime}`).getTime();
 
@@ -669,7 +675,7 @@
                 if (distance < 0) {
                     clearInterval(timerInterval);
                     localStorage.removeItem('darji_active_offer');
-                    displayContainer.innerHTML = '';
+                    if(displayContainer) displayContainer.innerHTML = '';
                     return;
                 }
 
@@ -684,21 +690,24 @@
                              minutes.toString().padStart(2, '0') + "m " + 
                              seconds.toString().padStart(2, '0') + "s";
 
-                document.getElementById('countdown-clock').innerText = timeString;
+                const clockElem = document.getElementById('countdown-clock');
+                if(clockElem) clockElem.innerText = timeString;
             }
 
-            displayContainer.innerHTML = `
-                <div class="offer-banner">
-                    <div class="offer-info">
-                        <i class="fas fa-bullhorn"></i>
-                        <div class="offer-text">
-                            <h4>📢 Special Offer: <strong>${offerData.text}</strong></h4>
+            if(displayContainer) {
+                displayContainer.innerHTML = `
+                    <div class="offer-banner">
+                        <div class="offer-info">
+                            <i class="fas fa-bullhorn"></i>
+                            <div class="offer-text">
+                                <h4>📢 Special Offer: <strong>${offerData.text}</strong></h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="offer-time">
-                        <i class="fas fa-hourglass-half"></i> Ends In: <span id="countdown-clock">--:--:--</span>
-                    </div>
-                </div>`;
+                        <div class="offer-time">
+                            <i class="fas fa-hourglass-half"></i> Ends In: <span id="countdown-clock">--:--:--</span>
+                        </div>
+                    </div>`;
+            }
 
             updateTimer();
             timerInterval = setInterval(updateTimer, 1000);
@@ -730,7 +739,8 @@
                 filterStoreProducts(); 
                 if(isAdminLoggedIn) displayAdminTable();
             } else {
-                document.getElementById('loading-indicator').style.display = 'block';
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.style.display = 'block';
             }
 
             try {
@@ -744,11 +754,13 @@
                 if(isAdminLoggedIn) displayAdminTable();
             } catch (error) {
                 console.error("Error loading products:", error);
-                if(!cachedData) {
-                    document.getElementById('loading-indicator').innerText = "❌ ડેટા લોડ કરવામાં મુશ્કેલી પડી!";
+                const loader = document.getElementById('loading-indicator');
+                if(!cachedData && loader) {
+                    loader.innerText = "❌ ડેટા લોડ કરવામાં મુશ્કેલી પડી!";
                 }
             } finally {
-                document.getElementById('loading-indicator').style.display = 'none';
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.style.display = 'none';
             }
         }
 
@@ -756,14 +768,20 @@
             selectedSizeFilter = size;
             
             document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
-            if(size === 'ALL') document.getElementById('chip-all').classList.add('active');
-            else document.getElementById('chip-' + size.toLowerCase()).classList.add('active');
+            const chipElem = document.getElementById('chip-' + size.toLowerCase());
+            if(size === 'ALL') {
+                const allChip = document.getElementById('chip-all');
+                if(allChip) allChip.classList.add('active');
+            } else if(chipElem) {
+                chipElem.classList.add('active');
+            }
 
             filterStoreProducts();
         }
 
         function filterStoreProducts() {
-            const searchQuery = document.getElementById('product-search').value.toLowerCase().trim();
+            const searchInput = document.getElementById('product-search');
+            const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
             
             const filtered = globalProducts.filter(product => {
                 const matchesSearch = product.name.toLowerCase().includes(searchQuery) || 
@@ -786,7 +804,6 @@
             renderStoreProducts(filtered);
         }
 
-        // ફોટો પર ડબલ ક્લિક કરવાથી ઇન્સ્ટાગ્રામ ઓપન કરવાનું લોજિક
         function openInstagramPhotos(link) {
             if(link && link.trim() !== "") {
                 window.open(link, '_blank');
@@ -795,6 +812,7 @@
 
         function renderStoreProducts(products) {
             const container = document.getElementById('dynamic-categories-container');
+            if(!container) return;
             container.innerHTML = '';
 
             if(products.length === 0) {
@@ -825,7 +843,6 @@
                     const message = `Hello Darji Brothers! I want to order:\nName: ${product.name}\nCategory: ${product.category}\nPrice: ${displayPrice}\nSizes: ${sizeStr}\nImage: ${finalImg}`;
                     const whatsappURL = `https://wa.me/918980223301?text=${encodeURIComponent(message)}`;
 
-                    // ઈમેજ ટેગમાં ondblclick ઇવેન્ટ ઉમેરી છે જે ઈન્સ્ટા લિંક ખોલશે
                     sectionHTML += `
                         <div class="product-card">
                             <img src="${finalImg}" alt="${product.name}" class="product-img" title="${instaLink ? 'Double click to see extra photos on Instagram' : product.name}" ondblclick="openInstagramPhotos('${instaLink}')" onerror="this.onerror=null; this.src='https://placehold.co/400x500?text=Image+Not+Found'">
@@ -864,23 +881,23 @@
             const offerView = document.getElementById('offer-mgmt-tab');
             const settingsView = document.getElementById('settings-mgmt-tab');
 
-            tabProducts.classList.remove('active');
-            tabOffer.classList.remove('active');
-            tabSettings.classList.remove('active');
+            if(tabProducts) tabProducts.classList.remove('active');
+            if(tabOffer) tabOffer.classList.remove('active');
+            if(tabSettings) tabSettings.classList.remove('active');
             
-            productView.style.display = 'none';
-            offerView.style.display = 'none';
-            settingsView.style.display = 'none';
+            if(productView) productView.style.display = 'none';
+            if(offerView) offerView.style.display = 'none';
+            if(settingsView) settingsView.style.display = 'none';
 
             if (tabName === 'products') {
-                tabProducts.classList.add('active');
-                productView.style.display = 'block';
+                if(tabProducts) tabProducts.classList.add('active');
+                if(productView) productView.style.display = 'block';
             } else if (tabName === 'offer') {
-                tabOffer.classList.add('active');
-                offerView.style.display = 'block';
+                if(tabOffer) tabOffer.classList.add('active');
+                if(offerView) offerView.style.display = 'block';
             } else if (tabName === 'settings') {
-                tabSettings.classList.add('active');
-                settingsView.style.display = 'block';
+                if(tabSettings) tabSettings.classList.add('active');
+                if(settingsView) settingsView.style.display = 'block';
             }
         }
 
@@ -1017,6 +1034,7 @@
                 console.error(error);
             } finally {
                 saveBtn.disabled = false;
+                saveBtn.innerText = editId ? "Update Product" : "Add Product";
             }
         }
 
@@ -1039,14 +1057,16 @@
 
         function displayAdminTable() {
             const tbody = document.getElementById('table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
             if(globalProducts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No products added yet.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No products added yet.</td></tr>';
                 return;
             }
-            globalProducts.forEach(product => {
+            globalProducts.forEach((product, index) => {
                 tbody.innerHTML += `
                     <tr>
+                        <td><strong>${index + 1}</strong></td>
                         <td><strong>${product.category}</strong></td>
                         <td>${product.name}</td>
                         <td>₹${product.price || 'On Request'}</td>
@@ -1070,7 +1090,8 @@
 
         function forceLogoHome() {
             isAdminLoggedIn = false;
-            document.getElementById('admin-pass').value = '';
+            const adminPassInput = document.getElementById('admin-pass');
+            if(adminPassInput) adminPassInput.value = '';
             cancelEdit();
             showStore();
         }
